@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e
+
+INFOLDER=~/certs
+
+if [[ "$1" == "" ]]; then
+echo "USAGE create_full_chain <domain>"
+exit 1
+fi
+if [[ "$2" != "" ]]; then
+INFOLDER="$2"
+fi
+
+DOMAIN="$1"
+
+cat "$INFOLDER/live/$DOMAIN/fullchain.pem" "$INFOLDER/live/$DOMAIN/privkey.pem" | tee target/cert-$DOMAIN.pem

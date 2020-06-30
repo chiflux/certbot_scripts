@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker run  -v "$(pwd)/.aws/certbot":/root/.aws/credentials -v "$(pwd)/certs":/etc/letsencrypt --rm certbot/dns-route53 renew
+

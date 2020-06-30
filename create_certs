@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -e
+
+OUTFOLDER=~/certs
+
+if [[ "$1" == "" ]]; then
+echo "USAGE create_certs <email> <domains>"
+exit 1
+fi
+if [[ "$2" == "" ]]; then
+echo "USAGE create_certs <email> <domains>"
+exit 2
+fi
+if [[ "$3" != "" ]]; then
+OUTFOLDER="$3"
+fi
+
+mkdir -p "$OUTFOLDER"
+
+EMAIL="$1"
+DOMAINS="$2"
+
+docker run -v ~/.aws/certbot:/root/.aws/credentials \
+           -v "$OUTFOLDER":/etc/letsencrypt \
+           --rm certbot/dns-route53 certonly \
+           --server https://acme-v02.api.letsencrypt.org/directory -n --agree-tos \
+           --expand \
+           --email "$EMAIL" --dns-route53 -d "$DOMAINS"
+
+echo "The certificates are here: $OUTFOLDER/..."
